@@ -4,13 +4,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 
-object Layout {
-    @Composable
-    fun CustomTopAppBar() {
-        TopAppBar(
-            title = {
-                Text("Insplash")
-            }
-        )
-    }
+@Composable
+fun CustomTopAppBar() {
+    TopAppBar(
+        title = {
+            Text("Insplash")
+        },
+    )
 }
