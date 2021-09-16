@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.codelabs.insplash.app.states.UiState
-import com.codelabs.insplash.app.api.responses.PhotoResponse
+import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.ui.composables.CenteredProgress
 import com.codelabs.insplash.ui.composables.CustomTopAppBar
 import com.codelabs.insplash.ui.composables.ErrorMessage
@@ -41,7 +41,7 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
                 is UiState.Error -> ErrorMessage(message = state.message) {
                     viewModel.getPhotos(1, 30)
                 }
-                is UiState.Success<*> -> PhotoList((state as UiState.Success<List<PhotoResponse>>).value) {
+                is UiState.Success<*> -> PhotoList((state as UiState.Success<List<Photo>>).value) {
                     viewModel.getPhotos(1, 30)
                 }
                 else -> Unit
@@ -52,7 +52,7 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun PhotoList(photos: List<PhotoResponse>, onItemClick: (PhotoResponse) -> Unit) {
+private fun PhotoList(photos: List<Photo>, onItemClick: (Photo) -> Unit) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(4.dp)

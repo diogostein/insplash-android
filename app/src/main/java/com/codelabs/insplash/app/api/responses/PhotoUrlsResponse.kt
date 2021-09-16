@@ -1,5 +1,6 @@
 package com.codelabs.insplash.app.api.responses
 
+import com.codelabs.insplash.app.models.PhotoUrls
 import com.squareup.moshi.Json
 
 data class PhotoUrlsResponse(
@@ -9,3 +10,13 @@ data class PhotoUrlsResponse(
     @field:Json(name = "small") val small: String?,
     @field:Json(name = "thumb") val thumb: String?,
 )
+
+fun PhotoUrlsResponse.toModel(): PhotoUrls {
+    return PhotoUrls(
+        raw = raw,
+        full = full,
+        regular = regular,
+        small = small,
+        thumb = thumb
+    )
+}

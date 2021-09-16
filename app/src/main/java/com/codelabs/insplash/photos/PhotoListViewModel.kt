@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codelabs.insplash.app.states.UiState
-import com.codelabs.insplash.app.api.responses.PhotoResponse
+import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.app.states.RepositoryState
 import com.codelabs.insplash.photos.data.PhotoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +18,8 @@ class PhotoListViewModel @Inject constructor(
     private val repository: PhotoRepository
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<UiState<List<PhotoResponse>>>(UiState.Initial)
-    val state: State<UiState<List<PhotoResponse>>> = _state
+    private val _state = mutableStateOf<UiState<List<Photo>>>(UiState.Initial)
+    val state: State<UiState<List<Photo>>> = _state
 
     init {
         getPhotos(1, 30)
@@ -31,7 +31,7 @@ class PhotoListViewModel @Inject constructor(
         repository.getPhotos(page, perPage).onEach { state ->
             _state.value = when (state) {
                 is RepositoryState.Success<*> ->
-                    UiState.Success((state as RepositoryState.Success<List<PhotoResponse>>).value)
+                    UiState.Success((state as RepositoryState.Success<List<Photo>>).value)
                 is RepositoryState.Failure ->
                     UiState.Error(state.message)
             }
