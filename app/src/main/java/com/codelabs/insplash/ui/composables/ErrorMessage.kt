@@ -8,11 +8,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.codelabs.insplash.R
 
 @Composable
-fun ErrorMessage(message: String? = "Error", onRetryTap: () -> Unit) {
+fun ErrorMessage(
+    message: String? = stringResource(R.string.an_error_occurred_please_try_again_later),
+    onRetryTap: () -> Unit
+) {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.Center,
@@ -24,7 +29,7 @@ fun ErrorMessage(message: String? = "Error", onRetryTap: () -> Unit) {
             onClick = onRetryTap,
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
         ) {
-            Text("Reload")
+            Text(stringResource(R.string.reload))
         }
     }
 }

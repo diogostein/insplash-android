@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Insplash</string>
+
+    <string name="reload">Reload</string>
+    <string name="no_more_results">No more results</string>
+    <string name="an_error_occurred_please_try_again_later">An error occurred. Please try again later.</string>
 </resources>
