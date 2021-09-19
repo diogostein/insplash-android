@@ -1,6 +1,7 @@
 package com.codelabs.insplash.photos
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -28,6 +29,7 @@ import com.codelabs.insplash.app.Const
 import com.codelabs.insplash.app.states.UiState
 import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.ui.composables.*
+import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
@@ -42,7 +44,7 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
         topBar = { CustomTopAppBar() },
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().navigationBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
             when (state) {
@@ -121,7 +123,7 @@ private fun PhotoListFrame(onTap: (() -> Unit)? = null, content: @Composable () 
             .height(200.dp)
             .padding(4.dp)
             .clickable(onClick = { onTap?.invoke() }),
-        color = Color(0x0D000000),
+        color = MaterialTheme.colors.secondary.copy(.05f),
         shape = RoundedCornerShape(8.dp)
     ) {
         content()

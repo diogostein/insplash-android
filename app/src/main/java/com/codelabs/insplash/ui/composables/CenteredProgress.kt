@@ -1,5 +1,6 @@
 package com.codelabs.insplash.ui.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,8 +15,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CenteredProgress(color: Color = MaterialTheme.colors.secondary) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colors.surface)
+            .padding(16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(color = color)
     }
