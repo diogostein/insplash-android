@@ -22,11 +22,10 @@ class PhotoRepositoryImpl(
         private val photosInMemory = mutableMapOf<String, Photo>()
     }
 
-    override fun getPhotos(page: Int, perPage: Int): Flow<RepositoryState<List<Photo>>> {
-        if (!networkHelper.isConnectionAvailable())
-            return flow { emit(RepositoryState.Failure(ErrorType.NoConnection)) }
-
-        return flow {
+    override fun getPhotos(page: Int, perPage: Int) = flow {
+        if (!networkHelper.isConnectionAvailable()) {
+            emit(RepositoryState.Failure(ErrorType.NoConnection))
+        } else {
             try {
                 val result = remoteDataSource.getPhotos(page, perPage)
 
@@ -35,25 +34,23 @@ class PhotoRepositoryImpl(
                 emit(RepositoryState.Failure(ErrorType.Failure(e.message)))
             }
         }
+
     }
 
-    override fun getPhoto(id: String): Flow<RepositoryState<Photo>> {
-        if (!networkHelper.isConnectionAvailable())
-            return flow { emit(RepositoryState.Failure(ErrorType.NoConnection)) }
-
-        return flow {
+    override fun getPhoto(id: String) = flow {
+        if (photosInMemory.containsKey(id)) {
+            emit(RepositoryState.Success(photosInMemory[id]!!))
+        } else if (!networkHelper.isConnectionAvailable()) {
+            emit(RepositoryState.Failure(ErrorType.NoConnection))
+        } else {
             try {
-                if (photosInMemory.containsKey(id)) {
-                    emit(RepositoryState.Success(photosInMemory[id]!!))
-                } else {
-                    val photoResult = remoteDataSource.getPhoto(id)
-                    val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
-                    val photoModel = photoResult.toModel(userResult)
+                val photoResult = remoteDataSource.getPhoto(id)
+                val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
+                val photoModel = photoResult.toModel(userResult)
 
-                    photosInMemory[id] = photoModel
+                photosInMemory[id] = photoModel
 
-                    emit(RepositoryState.Success(photoModel))
-                }
+                emit(RepositoryState.Success(photoModel))
             } catch (e: Exception) {
                 emit(RepositoryState.Failure(ErrorType.Failure(e.message)))
             }

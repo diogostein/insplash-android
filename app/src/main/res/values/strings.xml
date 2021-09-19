@@ -5,7 +5,7 @@
     <string name="location">Location</string>
     <string name="likes">Likes</string>
     <string name="no_more_results">No more results</string>
-    <string name="an_error_occurred_please_try_again_later">An error occurred. Please try again later.</string>
+    <string name="an_error_occurred_please_try_again">An error occurred. Please try again.</string>
     <string name="no_internet_connection">No internet connection.</string>
     <string name="unknown_error">Unknown error.</string>
     <string name="failed_to_fetch_data">Failed to fetch data.\nCheck your connection or try again later.</string>

@@ -26,7 +26,7 @@ fun ErrorMessage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            message ?: stringResource(R.string.an_error_occurred_please_try_again_later),
+            message ?: stringResource(R.string.an_error_occurred_please_try_again),
             textAlign = TextAlign.Center, color = color
         )
         Spacer(modifier = Modifier.height(16.dp))
