@@ -10,8 +10,10 @@ data class Photo(
     val height: Int? = null,
     val color: String? = null,
     val blurHash: String? = null,
+    val downloads: Int? = null,
     val likes: Int? = null,
     val likedByUser: Boolean? = null,
     val description: String? = null,
     val urls: PhotoUrls? = null,
+    val user: User? = null,
 )

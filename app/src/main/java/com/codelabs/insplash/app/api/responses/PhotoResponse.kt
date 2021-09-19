@@ -2,6 +2,7 @@ package com.codelabs.insplash.app.api.responses
 
 import com.codelabs.insplash.app.api.utils.toDateTime
 import com.codelabs.insplash.app.models.Photo
+import com.codelabs.insplash.app.models.User
 import com.squareup.moshi.Json
 
 data class PhotoResponse(
@@ -12,13 +13,15 @@ data class PhotoResponse(
     @field:Json(name = "height") val height: Int?,
     @field:Json(name = "color") val color: String?,
     @field:Json(name = "blur_hash") val blurHash: String?,
+    @field:Json(name = "downloads") val downloads: Int?,
     @field:Json(name = "likes") val likes: Int?,
     @field:Json(name = "liked_by_user") val likedByUser: Boolean?,
     @field:Json(name = "description") val description: String?,
     @field:Json(name = "urls") val urls: PhotoUrlsResponse?,
+    @field:Json(name = "user") val user: UserResponse?,
 )
 
-fun PhotoResponse.toModel(): Photo {
+fun PhotoResponse.toModel(user: UserResponse? = null): Photo {
     return Photo(
         id = id,
         createdAt = createdAt?.toDateTime(),
@@ -27,10 +30,12 @@ fun PhotoResponse.toModel(): Photo {
         height = height,
         color = color,
         blurHash = blurHash,
+        downloads = downloads,
         likes = likes,
         likedByUser = likedByUser,
         description = description,
-        urls = urls?.toModel()
+        urls = urls?.toModel(),
+        user = user?.toModel() ?: this.user?.toModel()
     )
 }
 

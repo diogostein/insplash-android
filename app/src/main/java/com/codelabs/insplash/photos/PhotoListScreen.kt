@@ -11,25 +11,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.codelabs.insplash.R
 import com.codelabs.insplash.app.Const
 import com.codelabs.insplash.app.states.UiState
 import com.codelabs.insplash.app.models.Photo
-import com.codelabs.insplash.ui.composables.CenteredProgress
-import com.codelabs.insplash.ui.composables.CustomTopAppBar
-import com.codelabs.insplash.ui.composables.ErrorMessage
+import com.codelabs.insplash.ui.composables.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel = hiltViewModel()) {
+    StatusBarTheme(darkIcons = true)
+
     val state = viewModel.state.value
 
     Scaffold(
@@ -45,7 +51,7 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
                     viewModel.getPhotos(reload = true)
                 }
                 is UiState.Success<List<Photo>> -> PhotoList(state, {
-                    viewModel.getPhotos(reload = true)
+                    navController.navigate("photos/${it.id}")
                 }, {
                     viewModel.getPhotos()
                 })
@@ -86,14 +92,7 @@ private fun PhotoList(
                 val photo = state.value[index]
 
                 PhotoListFrame(onTap = { onItemClick(photo) }) {
-                    GlideImage(
-                        imageModel = photo.urls!!.regular!!,
-                        requestOptions = RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .centerCrop(),
-                        contentScale = ContentScale.Crop,
-                        alignment = Alignment.Center,
-                    )
+                    GlideNetworkImage(photo.urls?.regular ?: "")
                 }
             }
         }

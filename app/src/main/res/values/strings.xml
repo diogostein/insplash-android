@@ -2,6 +2,13 @@
     <string name="app_name">Insplash</string>
 
     <string name="reload">Reload</string>
+    <string name="location">Location</string>
+    <string name="likes">Likes</string>
     <string name="no_more_results">No more results</string>
     <string name="an_error_occurred_please_try_again_later">An error occurred. Please try again later.</string>
+
+    <plurals name="downloads">
+        <item quantity="one">%,1d download</item>
+        <item quantity="other">%,1d downloads</item>
+    </plurals>
 </resources>

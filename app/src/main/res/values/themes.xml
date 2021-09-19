@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Theme.Insplash" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/light_gray</item>
+<!--        <item name="android:statusBarColor">@color/light_gray</item>-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>
