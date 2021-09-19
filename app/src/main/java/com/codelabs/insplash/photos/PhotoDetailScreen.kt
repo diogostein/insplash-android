@@ -18,15 +18,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.codelabs.insplash.R
 import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.app.states.UiState
@@ -37,8 +34,6 @@ import com.codelabs.insplash.ui.composables.StatusBarTheme
 import com.codelabs.insplash.ui.composables.helpers.quantityStringResource
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import com.skydoves.landscapist.CircularReveal
-import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun PhotoDetailScreen(
@@ -63,7 +58,7 @@ fun PhotoDetailScreen(
 }
 
 @Composable
-fun RenderPhoto(photo: Photo, onBackTap: () -> Unit) {
+private fun RenderPhoto(photo: Photo, onBackTap: () -> Unit) {
     StatusBarTheme(darkIcons = false)
 
     Box(

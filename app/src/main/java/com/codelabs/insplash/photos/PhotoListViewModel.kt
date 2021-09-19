@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codelabs.insplash.app.Const
+import com.codelabs.insplash.app.ErrorType
 import com.codelabs.insplash.app.Pager
 import com.codelabs.insplash.app.states.UiState
 import com.codelabs.insplash.app.models.Photo
@@ -38,7 +39,10 @@ class PhotoListViewModel @Inject constructor(
             _state.value = when (state) {
                 is RepositoryState.Success<List<Photo>> -> getSuccessState(state)
                 is RepositoryState.Failure ->
-                    if (reload) UiState.Error(state.message) else UiState.PaginationError(_pager.list, state.message)
+                    if (reload)
+                        UiState.Error(state.error.message)
+                    else
+                        UiState.PaginationError(_pager.list, state.error.message)
             }
         }.launchIn(viewModelScope)
     }

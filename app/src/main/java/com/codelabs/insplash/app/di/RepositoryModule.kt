@@ -1,5 +1,6 @@
 package com.codelabs.insplash.app.di
 
+import com.codelabs.insplash.app.helpers.NetworkHelper
 import com.codelabs.insplash.photos.data.PhotoRemoteDataSource
 import com.codelabs.insplash.photos.data.PhotoRepository
 import com.codelabs.insplash.photos.data.PhotoRepositoryImpl
@@ -15,8 +16,11 @@ object RepositoryModule {
 
     @ViewModelScoped
     @Provides
-    fun providePhotoRepository(remoteDataSource: PhotoRemoteDataSource): PhotoRepository {
-        return PhotoRepositoryImpl(remoteDataSource)
+    fun providePhotoRepository(
+        remoteDataSource: PhotoRemoteDataSource,
+        networkHelper: NetworkHelper
+    ): PhotoRepository {
+        return PhotoRepositoryImpl(remoteDataSource, networkHelper)
     }
 
 }

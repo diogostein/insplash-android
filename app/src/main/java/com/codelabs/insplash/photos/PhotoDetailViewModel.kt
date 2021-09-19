@@ -2,8 +2,11 @@ package com.codelabs.insplash.photos
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codelabs.insplash.R
+import com.codelabs.insplash.app.ErrorType
 import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.app.states.RepositoryState
 import com.codelabs.insplash.app.states.UiState
@@ -26,10 +29,9 @@ class PhotoDetailViewModel @Inject constructor(
         _state.value = UiState.Loading
 
         repository.getPhoto(id).onEach { state ->
-            delay(3000)
             _state.value = when (state) {
                 is RepositoryState.Success<Photo> -> UiState.Success(state.value)
-                is RepositoryState.Failure -> UiState.Error(state.message)
+                is RepositoryState.Failure -> UiState.Error(state.error.message)
             }
         }.launchIn(viewModelScope)
     }

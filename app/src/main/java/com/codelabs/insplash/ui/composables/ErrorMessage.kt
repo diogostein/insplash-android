@@ -16,7 +16,7 @@ import com.codelabs.insplash.R
 
 @Composable
 fun ErrorMessage(
-    message: String? = stringResource(R.string.an_error_occurred_please_try_again_later),
+    message: String? = null,
     color: Color = MaterialTheme.colors.secondary,
     onRetryTap: () -> Unit
 ) {
@@ -25,7 +25,10 @@ fun ErrorMessage(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(message!!, textAlign = TextAlign.Center, color = color)
+        Text(
+            message ?: stringResource(R.string.an_error_occurred_please_try_again_later),
+            textAlign = TextAlign.Center, color = color
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = onRetryTap,

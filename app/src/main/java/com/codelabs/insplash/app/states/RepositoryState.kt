@@ -1,6 +1,8 @@
 package com.codelabs.insplash.app.states
 
+import com.codelabs.insplash.app.ErrorType
+
 sealed class RepositoryState<out T> {
     class Success<S>(val value: S) : RepositoryState<S>()
-    class Failure(val message: String? = null) : RepositoryState<Nothing>()
+    open class Failure(val error: ErrorType = ErrorType.Unknown) : RepositoryState<Nothing>()
 }
