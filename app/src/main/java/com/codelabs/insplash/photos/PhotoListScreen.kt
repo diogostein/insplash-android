@@ -10,52 +10,61 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import com.codelabs.insplash.R
 import com.codelabs.insplash.app.Const
 import com.codelabs.insplash.app.states.UiState
 import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.ui.composables.*
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.skydoves.landscapist.CircularReveal
-import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel = hiltViewModel()) {
     StatusBarTheme(darkIcons = true)
 
     val state = viewModel.state.value
+    val query = viewModel.query.value
 
     Scaffold(
-        topBar = { CustomTopAppBar() },
+        topBar = {
+            CustomTopAppBar(bottomContent = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .background(MaterialTheme.colors.primarySurface)
+                ) {
+                    ChipGroup(
+                        chipValues = Const.Seed.topics.map { ChipValue(it.title!!, it.slug!!) },
+                        selectedValue = query,
+                        onChanged = {
+                            viewModel.getPhotos(true, it)
+                        }
+                    )
+                }
+            })
+        },
     ) {
         Box(
-            modifier = Modifier.fillMaxSize().navigationBarsPadding(),
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
             when (state) {
                 is UiState.Loading -> CenteredProgress()
                 is UiState.Error -> ErrorMessage(message = state.message) {
-                    viewModel.getPhotos(reload = true)
+                    viewModel.getPhotos(true, query)
                 }
                 is UiState.Success<List<Photo>> -> PhotoList(state, {
                     navController.navigate("photos/${it.id}")
                 }, {
-                    viewModel.getPhotos()
+                    viewModel.getPhotos(query = query)
                 })
                 else -> Unit
             }

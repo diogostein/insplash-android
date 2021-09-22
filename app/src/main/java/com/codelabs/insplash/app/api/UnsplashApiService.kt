@@ -1,5 +1,6 @@
 package com.codelabs.insplash.app.api
 
+import com.codelabs.insplash.app.api.responses.PagingResponse
 import com.codelabs.insplash.app.api.responses.PhotoResponse
 import com.codelabs.insplash.app.api.responses.UserResponse
 import retrofit2.http.GET
@@ -17,6 +18,14 @@ interface UnsplashApiService {
 
     @GET("photos/{id}")
     suspend fun getPhoto(@Path("id") id: String): PhotoResponse
+
+    @GET("search/photos")
+    suspend fun searchPhotos(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
+        @Query("order_by") orderBy: String? = null
+    ): PagingResponse<PhotoResponse>
 
     @GET("users/{username}")
     suspend fun getUser(@Path("username") username: String): UserResponse

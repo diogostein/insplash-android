@@ -26,16 +26,27 @@ class PhotoListViewModel @Inject constructor(
 
     private val _pager = Pager<Photo>(Const.GridViewPaging.PAGE_SIZE)
 
+    private val _query = mutableStateOf<String?>("")
+    val query: State<String?> = _query
+
     init {
         getPhotos(reload = true)
     }
 
-    fun getPhotos(reload: Boolean = false) {
+    fun getPhotos(reload: Boolean = false, query: String? = null) {
+        _query.value = query
+
         if (reload) _pager.reset()
 
         _state.value = if (reload) UiState.Loading else UiState.PaginationLoading(_pager.list)
 
-        repository.getPhotos(_pager.pageNumber, _pager.pageSize).onEach { state ->
+        val result = if (query == null || query.isBlank()) {
+            repository.getPhotos(_pager.pageNumber, _pager.pageSize)
+        } else {
+            repository.searchPhotos(query, _pager.pageNumber, _pager.pageSize)
+        }
+
+        result.onEach { state ->
             _state.value = when (state) {
                 is RepositoryState.Success<List<Photo>> -> getSuccessState(state)
                 is RepositoryState.Failure ->
@@ -48,8 +59,8 @@ class PhotoListViewModel @Inject constructor(
     }
 
     private fun getSuccessState(state: RepositoryState.Success<List<Photo>>): UiState<List<Photo>> {
-        // We finish pagination on page n to save API rate limit
-        val shouldFinishPagination = _pager.pageNumber >= 2
+        // We finish pagination on page N to save API rate limit
+        val shouldFinishPagination = _pager.pageNumber >= 3
 
         return if (_pager.refresh(state.value).hasReachedEndOfResults || shouldFinishPagination) {
             UiState.PaginationFinished(_pager.list)

@@ -4,6 +4,7 @@ import com.codelabs.insplash.app.ErrorType
 import com.codelabs.insplash.app.api.responses.toModel
 import com.codelabs.insplash.app.helpers.NetworkHelper
 import com.codelabs.insplash.app.models.Photo
+import com.codelabs.insplash.app.repositoryResultHandler
 import com.codelabs.insplash.app.states.RepositoryState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 interface PhotoRepository {
     fun getPhotos(page: Int, perPage: Int): Flow<RepositoryState<List<Photo>>>
     fun getPhoto(id: String): Flow<RepositoryState<Photo>>
+    fun searchPhotos(query: String, page: Int, perPage: Int): Flow<RepositoryState<List<Photo>>>
 }
 
 class PhotoRepositoryImpl(
@@ -26,15 +28,12 @@ class PhotoRepositoryImpl(
         if (!networkHelper.isConnectionAvailable()) {
             emit(RepositoryState.Failure(ErrorType.NoConnection))
         } else {
-            try {
+            emit(repositoryResultHandler {
                 val result = remoteDataSource.getPhotos(page, perPage)
 
-                emit(RepositoryState.Success(result.toModel()))
-            } catch (e: Exception) {
-                emit(RepositoryState.Failure(ErrorType.Failure(e.message)))
-            }
+                RepositoryState.Success(result.toModel())
+            })
         }
-
     }
 
     override fun getPhoto(id: String) = flow {
@@ -43,17 +42,27 @@ class PhotoRepositoryImpl(
         } else if (!networkHelper.isConnectionAvailable()) {
             emit(RepositoryState.Failure(ErrorType.NoConnection))
         } else {
-            try {
+            emit(repositoryResultHandler {
                 val photoResult = remoteDataSource.getPhoto(id)
                 val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
                 val photoModel = photoResult.toModel(userResult)
 
                 photosInMemory[id] = photoModel
 
-                emit(RepositoryState.Success(photoModel))
-            } catch (e: Exception) {
-                emit(RepositoryState.Failure(ErrorType.Failure(e.message)))
-            }
+                RepositoryState.Success(photoModel)
+            })
+        }
+    }
+
+    override fun searchPhotos(query: String, page: Int, perPage: Int) = flow {
+        if (!networkHelper.isConnectionAvailable()) {
+            emit(RepositoryState.Failure(ErrorType.NoConnection))
+        } else {
+            emit(repositoryResultHandler {
+                val result = remoteDataSource.searchPhotos(query, page, perPage)
+
+                RepositoryState.Success(result.results.toModel())
+            })
         }
     }
 
