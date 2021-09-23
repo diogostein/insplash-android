@@ -29,7 +29,9 @@ fun ChipGroup(
     selectedValue: String? = null,
     onChanged: (String) -> Unit
 ) {
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(selectedValue ?: "") }
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf("") }
+
+    onOptionSelected(selectedValue ?: "")
 
     LazyRow(
         modifier = modifier
@@ -53,6 +55,7 @@ private fun ChipButton(
     onOptionSelected: (String) -> Unit,
     onClick: (String) -> Unit
 ) {
+    println(selectedOption)
     val isActive = selectedOption == chipValue.value
 
     Clickable(

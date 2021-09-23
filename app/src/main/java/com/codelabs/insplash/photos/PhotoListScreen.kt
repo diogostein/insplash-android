@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,9 +30,21 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
     val state = viewModel.state.value
     val query = viewModel.query.value
 
+    var hideSearchField by rememberSaveable { mutableStateOf(true) }
+
     Scaffold(
         topBar = {
-            CustomTopAppBar(bottomContent = {
+            CustomTopAppBar(
+                initialSearchText = query,
+                hideSearchField = hideSearchField,
+                onSearch = {
+                    hideSearchField = false
+                    viewModel.getPhotos(true, it)
+                },
+                onCancelSearch = {
+                    viewModel.getPhotos(true)
+                },
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -43,18 +56,18 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
                         chipValues = Const.Seed.topics.map { ChipValue(it.title!!, it.slug!!) },
                         selectedValue = query,
                         onChanged = {
+                            hideSearchField = true
                             viewModel.getPhotos(true, it)
                         }
                     )
                 }
-            })
+            }
         },
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .navigationBarsPadding(),
-            contentAlignment = Alignment.Center
         ) {
             when (state) {
                 is UiState.Loading -> CenteredProgress()

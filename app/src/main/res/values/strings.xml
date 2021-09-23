@@ -4,6 +4,9 @@
     <string name="reload">Reload</string>
     <string name="location">Location</string>
     <string name="likes">Likes</string>
+    <string name="search">Search</string>
+    <string name="close">Close</string>
+    <string name="search_beautiful_photos">Search beautiful photos</string>
     <string name="no_more_results">No more results</string>
     <string name="an_error_occurred_please_try_again">An error occurred. Please try again.</string>
     <string name="no_internet_connection">No internet connection.</string>
