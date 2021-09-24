@@ -1,7 +1,9 @@
 package com.codelabs.insplash.photos.data
 
 import com.codelabs.insplash.app.ErrorType
+import com.codelabs.insplash.app.api.responses.toEntity
 import com.codelabs.insplash.app.api.responses.toModel
+import com.codelabs.insplash.app.database.relationships.toModel
 import com.codelabs.insplash.app.helpers.NetworkHelper
 import com.codelabs.insplash.app.models.Photo
 import com.codelabs.insplash.app.repositoryResultHandler
@@ -17,6 +19,7 @@ interface PhotoRepository {
 
 class PhotoRepositoryImpl(
     private val remoteDataSource: PhotoRemoteDataSource,
+    private val localDataSource: PhotoLocalDataSource,
     private val networkHelper: NetworkHelper,
 ) : PhotoRepository {
 
@@ -31,14 +34,18 @@ class PhotoRepositoryImpl(
             emit(repositoryResultHandler {
                 val result = remoteDataSource.getPhotos(page, perPage)
 
+                localDataSource.insertPhotos(result.toEntity())
+
                 RepositoryState.Success(result.toModel())
             })
         }
     }
 
     override fun getPhoto(id: String) = flow {
-        if (photosInMemory.containsKey(id)) {
-            emit(RepositoryState.Success(photosInMemory[id]!!))
+        val photoFromDb = localDataSource.getPhoto(id)
+
+        if (photoFromDb?.user != null) {
+            emit(RepositoryState.Success(photoFromDb.toModel()))
         } else if (!networkHelper.isConnectionAvailable()) {
             emit(RepositoryState.Failure(ErrorType.NoConnection))
         } else {
@@ -47,11 +54,34 @@ class PhotoRepositoryImpl(
                 val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
                 val photoModel = photoResult.toModel(userResult)
 
-                photosInMemory[id] = photoModel
+                localDataSource.insertPhotos(listOf(photoResult.toEntity()))
+                localDataSource.insertUser(userResult.toEntity())
 
                 RepositoryState.Success(photoModel)
             })
         }
+
+//        if (!networkHelper.isConnectionAvailable()) {
+//            emit(RepositoryState.Failure(ErrorType.NoConnection))
+//        } else {
+//            emit(repositoryResultHandler {
+//
+//
+//                if (photoFromDb != null) {
+//
+//                } else {
+//                    val photoResult = remoteDataSource.getPhoto(id)
+//                    val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
+//                    val photoModel = photoResult.toModel(userResult)
+//                }
+//
+//
+//
+//                photosInMemory[id] = photoModel
+//
+//                RepositoryState.Success(photoModel)
+//            })
+//        }
     }
 
     override fun searchPhotos(query: String, page: Int, perPage: Int) = flow {
@@ -60,6 +90,8 @@ class PhotoRepositoryImpl(
         } else {
             emit(repositoryResultHandler {
                 val result = remoteDataSource.searchPhotos(query, page, perPage)
+
+                localDataSource.insertPhotos(result.results.toEntity())
 
                 RepositoryState.Success(result.results.toModel())
             })

@@ -6,4 +6,5 @@ open class CustomException(
     override val message: String? = null,
 ) : Exception() {
     class Server(val code: Int? = null, val apiError: UnsplashApiError? = null) : CustomException()
+    class Database(message: String? = null) : CustomException(message)
 }

@@ -1,8 +1,8 @@
 package com.codelabs.insplash.app.api.responses
 
-import com.codelabs.insplash.app.api.utils.toDateTime
+import com.codelabs.insplash.app.utils.toDateTime
+import com.codelabs.insplash.app.database.entities.PhotoEntity
 import com.codelabs.insplash.app.models.Photo
-import com.codelabs.insplash.app.models.User
 import com.squareup.moshi.Json
 
 data class PhotoResponse(
@@ -40,3 +40,17 @@ fun PhotoResponse.toModel(user: UserResponse? = null): Photo {
 }
 
 fun List<PhotoResponse>.toModel() = map { it.toModel() }
+
+fun PhotoResponse.toEntity(): PhotoEntity {
+    return PhotoEntity(
+        id = id!!,
+        username = user?.username,
+        color = color,
+        blurHash = blurHash,
+        downloads = downloads,
+        likes = likes,
+        urls = urls?.toEntity(),
+    )
+}
+
+fun List<PhotoResponse>.toEntity() = map { it.toEntity() }

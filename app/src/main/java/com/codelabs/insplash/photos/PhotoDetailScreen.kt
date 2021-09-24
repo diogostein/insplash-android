@@ -57,16 +57,18 @@ fun PhotoDetailScreen(
 private fun RenderPhoto(photo: Photo, onBackTap: () -> Unit) {
     StatusBarTheme(darkIcons = false)
 
+    val photoColor = Color(android.graphics.Color.parseColor(photo.color))
+
     var showForeground by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier
             .navigationBarsPadding()
             .fillMaxSize()
-            .background(Color.Black)
+            .background(photoColor)
     ) {
         Clickable(onClick = { showForeground = !showForeground }) {
-            GlideNetworkImage(photo.urls?.full ?: "")
+            GlideNetworkImage(photo.urls?.full ?: "", modifier = Modifier.background(photoColor))
         }
 
         if (showForeground) {

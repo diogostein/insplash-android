@@ -1,6 +1,9 @@
 package com.codelabs.insplash.app.di
 
 import com.codelabs.insplash.app.api.UnsplashApiService
+import com.codelabs.insplash.app.database.InsplashDatabase
+import com.codelabs.insplash.photos.data.PhotoLocalDataSource
+import com.codelabs.insplash.photos.data.PhotoLocalDataSourceImpl
 import com.codelabs.insplash.photos.data.PhotoRemoteDataSource
 import com.codelabs.insplash.photos.data.PhotoRemoteDataSourceImpl
 import dagger.Module
@@ -17,6 +20,12 @@ object DataSourceModule {
     @Provides
     fun providePhotoRemoteDataSource(apiService: UnsplashApiService): PhotoRemoteDataSource {
         return PhotoRemoteDataSourceImpl(apiService)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun providePhotoLocalDataSource(database: InsplashDatabase): PhotoLocalDataSource {
+        return PhotoLocalDataSourceImpl(database)
     }
 
 }

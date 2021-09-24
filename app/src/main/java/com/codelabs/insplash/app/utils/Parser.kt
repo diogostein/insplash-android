@@ -1,4 +1,4 @@
-package com.codelabs.insplash.app.api.utils
+package com.codelabs.insplash.app.utils
 
 import java.text.ParseException
 import java.text.SimpleDateFormat

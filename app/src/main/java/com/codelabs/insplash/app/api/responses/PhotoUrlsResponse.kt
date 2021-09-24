@@ -1,5 +1,6 @@
 package com.codelabs.insplash.app.api.responses
 
+import com.codelabs.insplash.app.database.entities.UrlsEntity
 import com.codelabs.insplash.app.models.PhotoUrls
 import com.squareup.moshi.Json
 
@@ -13,6 +14,16 @@ data class PhotoUrlsResponse(
 
 fun PhotoUrlsResponse.toModel(): PhotoUrls {
     return PhotoUrls(
+        raw = raw,
+        full = full,
+        regular = regular,
+        small = small,
+        thumb = thumb
+    )
+}
+
+fun PhotoUrlsResponse.toEntity(): UrlsEntity {
+    return UrlsEntity(
         raw = raw,
         full = full,
         regular = regular,
