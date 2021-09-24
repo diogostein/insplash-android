@@ -2,6 +2,8 @@ package com.codelabs.insplash.app.di
 
 import com.codelabs.insplash.app.api.UnsplashApiService
 import com.codelabs.insplash.app.database.InsplashDatabase
+import com.codelabs.insplash.favorites.data.FavoriteLocalDataSource
+import com.codelabs.insplash.favorites.data.FavoriteLocalDataSourceImpl
 import com.codelabs.insplash.photos.data.PhotoLocalDataSource
 import com.codelabs.insplash.photos.data.PhotoLocalDataSourceImpl
 import com.codelabs.insplash.photos.data.PhotoRemoteDataSource
@@ -26,6 +28,12 @@ object DataSourceModule {
     @Provides
     fun providePhotoLocalDataSource(database: InsplashDatabase): PhotoLocalDataSource {
         return PhotoLocalDataSourceImpl(database)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideFavoriteLocalDataSource(database: InsplashDatabase): FavoriteLocalDataSource {
+        return FavoriteLocalDataSourceImpl(database)
     }
 
 }

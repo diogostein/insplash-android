@@ -16,4 +16,5 @@ data class Photo(
     val description: String? = null,
     val urls: PhotoUrls? = null,
     val user: User? = null,
+    val isFavorite: Boolean? = null,
 )

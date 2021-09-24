@@ -23,10 +23,6 @@ class PhotoRepositoryImpl(
     private val networkHelper: NetworkHelper,
 ) : PhotoRepository {
 
-    companion object {
-        private val photosInMemory = mutableMapOf<String, Photo>()
-    }
-
     override fun getPhotos(page: Int, perPage: Int) = flow {
         if (!networkHelper.isConnectionAvailable()) {
             emit(RepositoryState.Failure(ErrorType.NoConnection))
@@ -42,14 +38,14 @@ class PhotoRepositoryImpl(
     }
 
     override fun getPhoto(id: String) = flow {
-        val photoFromDb = localDataSource.getPhoto(id)
+        emit(repositoryResultHandler {
+            val photoFromDb = localDataSource.getPhoto(id)
 
-        if (photoFromDb?.user != null) {
-            emit(RepositoryState.Success(photoFromDb.toModel()))
-        } else if (!networkHelper.isConnectionAvailable()) {
-            emit(RepositoryState.Failure(ErrorType.NoConnection))
-        } else {
-            emit(repositoryResultHandler {
+            if (photoFromDb?.user != null) {
+                RepositoryState.Success(photoFromDb.toModel())
+            } else if (!networkHelper.isConnectionAvailable()) {
+                RepositoryState.Failure(ErrorType.NoConnection)
+            } else {
                 val photoResult = remoteDataSource.getPhoto(id)
                 val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
                 val photoModel = photoResult.toModel(userResult)
@@ -58,30 +54,8 @@ class PhotoRepositoryImpl(
                 localDataSource.insertUser(userResult.toEntity())
 
                 RepositoryState.Success(photoModel)
-            })
-        }
-
-//        if (!networkHelper.isConnectionAvailable()) {
-//            emit(RepositoryState.Failure(ErrorType.NoConnection))
-//        } else {
-//            emit(repositoryResultHandler {
-//
-//
-//                if (photoFromDb != null) {
-//
-//                } else {
-//                    val photoResult = remoteDataSource.getPhoto(id)
-//                    val userResult = remoteDataSource.getUser(photoResult.user!!.username!!)
-//                    val photoModel = photoResult.toModel(userResult)
-//                }
-//
-//
-//
-//                photosInMemory[id] = photoModel
-//
-//                RepositoryState.Success(photoModel)
-//            })
-//        }
+            }
+        })
     }
 
     override fun searchPhotos(query: String, page: Int, perPage: Int) = flow {

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.net.HttpURLConnection
 
-suspend fun <T> repositoryResultHandler(callback: suspend () -> RepositoryState.Success<T>): RepositoryState<T> {
+suspend fun <T> repositoryResultHandler(callback: suspend () -> RepositoryState<T>): RepositoryState<T> {
     return try {
         callback.invoke()
     } catch (e: CustomException.Server) {
@@ -36,5 +36,13 @@ suspend fun <T> remoteResultHandler(callback: suspend () -> T): T {
         }
     } catch (e: Exception) {
         throw CustomException(message = e.message)
+    }
+}
+
+suspend fun <T> localResultHandler(callback: suspend () -> T): T {
+    return try {
+        callback.invoke()
+    } catch (e: Exception) {
+        throw CustomException.Database(message = e.message)
     }
 }

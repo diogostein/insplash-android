@@ -2,7 +2,7 @@ package com.codelabs.insplash.app.database.daos
 
 import androidx.room.*
 import com.codelabs.insplash.app.database.entities.PhotoEntity
-import com.codelabs.insplash.app.database.relationships.PhotoAndUser
+import com.codelabs.insplash.app.database.relationships.PhotoAndUserAndFavorite
 
 @Dao
 interface PhotoDao {
@@ -12,6 +12,6 @@ interface PhotoDao {
 
     @Transaction
     @Query("SELECT * FROM photos WHERE id = :id")
-    suspend fun getPhotoAndUser(id: String): PhotoAndUser?
+    suspend fun getPhotoAndUser(id: String): PhotoAndUserAndFavorite?
 
 }

@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.runtime.*
@@ -41,20 +43,30 @@ fun PhotoDetailScreen(
         viewModel.getPhoto(photoId)
     }
 
-    when (val state = viewModel.state.value) {
+    val state = viewModel.state.value
+    val favoriteState = viewModel.isFavorite.value
+
+    when (state) {
         is UiState.Loading -> CenteredProgress()
         is UiState.Error -> ErrorMessage(message = state.message) {
             viewModel.getPhoto(photoId)
         }
-        is UiState.Success<Photo> -> RenderPhoto(state.value) {
+        is UiState.Success<Photo> -> RenderPhoto(state.value, favoriteState, {
             navController.popBackStack()
-        }
+        }, { photo, isFavorite ->
+            viewModel.setFavorite(photo.id!!, isFavorite)
+        })
         else -> Unit
     }
 }
 
 @Composable
-private fun RenderPhoto(photo: Photo, onBackTap: () -> Unit) {
+private fun RenderPhoto(
+    photo: Photo,
+    isFavorite: Boolean,
+    onBackTap: () -> Unit,
+    onFavoriteTap: (Photo, Boolean) -> Unit,
+) {
     StatusBarTheme(darkIcons = false)
 
     val photoColor = Color(android.graphics.Color.parseColor(photo.color))
@@ -72,14 +84,18 @@ private fun RenderPhoto(photo: Photo, onBackTap: () -> Unit) {
         }
 
         if (showForeground) {
-            TopSection(onBackTap)
+            TopSection(isFavorite, onBackTap) { onFavoriteTap(photo, isFavorite) }
             BottomSection(photo)
         }
     }
 }
 
 @Composable
-private fun BoxScope.TopSection(onBackTap: () -> Unit) {
+private fun BoxScope.TopSection(
+    isFavorite: Boolean,
+    onBackTap: () -> Unit,
+    onFavoriteTap: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,13 +115,23 @@ private fun BoxScope.TopSection(onBackTap: () -> Unit) {
             backgroundColor = Color.Transparent,
             elevation = 0.dp,
             navigationIcon = {
-                IconButton(onClick = { onBackTap() }) {
-                    Icon(Icons.Filled.ArrowBack,
-                        contentDescription = "",
+                IconButton(onClick = onBackTap) {
+                    Icon(
+                        Icons.Filled.ArrowBack,
+                        stringResource(R.string.back),
                         tint = Color.White.copy(alpha = .6f)
                     )
                 }
             },
+            actions = {
+                IconButton(onClick = {onFavoriteTap()}) {
+                    Icon(
+                        if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        stringResource(R.string.favorite),
+                        tint = if (isFavorite) Color(0xffff6663) else Color.White.copy(alpha = .7f),
+                    )
+                }
+            }
         )
     }
 }

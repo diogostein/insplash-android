@@ -13,5 +13,5 @@ data class PhotoEntity(
     @ColumnInfo(name = "blur_hash") val blurHash: String?,
     @ColumnInfo(name = "downloads") val downloads: Int?,
     @ColumnInfo(name = "likes") val likes: Int?,
-    @Embedded(prefix = "url_") val urls: UrlsEntity?
+    @Embedded(prefix = "url_") val urls: UrlsEntity?,
 )

@@ -2,20 +2,23 @@ package com.codelabs.insplash.app.database.relationships
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.codelabs.insplash.app.database.entities.FavoriteEntity
 import com.codelabs.insplash.app.database.entities.PhotoEntity
 import com.codelabs.insplash.app.database.entities.UserEntity
 import com.codelabs.insplash.app.database.entities.toModel
 import com.codelabs.insplash.app.models.Photo
 
-data class PhotoAndUser(
+data class PhotoAndUserAndFavorite(
     @Embedded val photo: PhotoEntity,
 
     @Relation(parentColumn = "username_ref", entityColumn = "username")
-    val user: UserEntity?
+    val user: UserEntity?,
+
+    @Relation(parentColumn = "id", entityColumn = "favorite_photo_id")
+    val favorite: FavoriteEntity?
 )
 
-
-fun PhotoAndUser.toModel(): Photo {
+fun PhotoAndUserAndFavorite.toModel(): Photo {
     return Photo(
         id = photo.id,
         color = photo.color,
@@ -23,6 +26,7 @@ fun PhotoAndUser.toModel(): Photo {
         downloads = photo.downloads,
         likes = photo.likes,
         urls = photo.urls?.toModel(),
-        user = user?.toModel()
+        user = user?.toModel(),
+        isFavorite = favorite?.favoritePhotoId != null
     )
 }

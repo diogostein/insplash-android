@@ -1,6 +1,9 @@
 package com.codelabs.insplash.app.di
 
 import com.codelabs.insplash.app.helpers.NetworkHelper
+import com.codelabs.insplash.favorites.data.FavoriteLocalDataSource
+import com.codelabs.insplash.favorites.data.FavoriteRepository
+import com.codelabs.insplash.favorites.data.FavoriteRepositoryImpl
 import com.codelabs.insplash.photos.data.PhotoLocalDataSource
 import com.codelabs.insplash.photos.data.PhotoRemoteDataSource
 import com.codelabs.insplash.photos.data.PhotoRepository
@@ -23,6 +26,12 @@ object RepositoryModule {
         networkHelper: NetworkHelper
     ): PhotoRepository {
         return PhotoRepositoryImpl(remoteDataSource, localDataSource, networkHelper)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideFavoriteRepository(localDataSource: FavoriteLocalDataSource): FavoriteRepository {
+        return FavoriteRepositoryImpl(localDataSource)
     }
 
 }
