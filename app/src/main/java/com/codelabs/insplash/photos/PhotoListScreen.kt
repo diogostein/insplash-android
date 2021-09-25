@@ -7,13 +7,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.codelabs.insplash.R
@@ -31,6 +37,8 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
     val query = viewModel.query.value
 
     var hideSearchField by rememberSaveable { mutableStateOf(true) }
+    var showMenu by remember { mutableStateOf(false) }
+    var menuMoreCoordinates by remember { mutableStateOf(Size.Zero) }
 
     Scaffold(
         topBar = {
@@ -44,6 +52,22 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
                 onCancelSearch = {
                     viewModel.getPhotos(true)
                 },
+                actions = {
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(Icons.Filled.MoreVert, null)
+                        }
+                        PopupMenu(
+                            menuItems = listOf(stringResource(R.string.favorites)),
+                            onClickCallbacks = listOf {
+                                navController.navigate("favorites")
+                            },
+                            showMenu = showMenu,
+                            onDismiss = { showMenu = false }) {
+                        }
+                    }
+
+                }
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -135,19 +159,5 @@ private fun NoMoreResults() {
             stringResource(R.string.no_more_results),
             textAlign = TextAlign.Center,
         )
-    }
-}
-
-@Composable
-private fun PhotoListFrame(onTap: (() -> Unit)? = null, content: @Composable () -> Unit) {
-    Surface(
-        modifier = Modifier
-            .height(200.dp)
-            .padding(4.dp)
-            .clickable(onClick = { onTap?.invoke() }),
-        color = MaterialTheme.colors.secondary.copy(.05f),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        content()
     }
 }

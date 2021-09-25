@@ -30,3 +30,5 @@ fun PhotoAndUserAndFavorite.toModel(): Photo {
         isFavorite = favorite?.favoritePhotoId != null
     )
 }
+
+fun List<PhotoAndUserAndFavorite>.toModel() = map { it.toModel() }

@@ -128,7 +128,7 @@ private fun BoxScope.TopSection(
                     Icon(
                         if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         stringResource(R.string.favorite),
-                        tint = if (isFavorite) Color(0xffff6663) else Color.White.copy(alpha = .7f),
+                        tint = if (isFavorite) Color(0xffff7d7a) else Color.White.copy(alpha = .7f),
                     )
                 }
             }

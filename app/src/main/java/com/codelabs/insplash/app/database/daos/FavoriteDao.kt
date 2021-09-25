@@ -1,10 +1,8 @@
 package com.codelabs.insplash.app.database.daos
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import com.codelabs.insplash.app.database.entities.FavoriteEntity
+import com.codelabs.insplash.app.database.relationships.PhotoAndUserAndFavorite
 
 @Dao
 interface FavoriteDao {
@@ -14,5 +12,8 @@ interface FavoriteDao {
 
     @Delete
     suspend fun delete(favorite: FavoriteEntity)
+
+    @Query("SELECT * FROM photos WHERE id IN (SELECT favorite_photo_id FROM favorites)")
+    suspend fun getPhotos(): List<PhotoAndUserAndFavorite>
 
 }

@@ -2,6 +2,7 @@ package com.codelabs.insplash.ui.composables
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -31,6 +32,7 @@ fun CustomTopAppBar(
     onCancelSearch: (() -> Unit)? = null,
     hideSearchField: Boolean = true,
     initialSearchText: String? = null,
+    actions: (@Composable () -> Unit)? = null,
     bottomContent: (@Composable () -> Unit)? = null,
 ) {
     var showSearchField by remember { mutableStateOf(!hideSearchField) }
@@ -77,9 +79,7 @@ fun CustomTopAppBar(
                                 Icon(Icons.Filled.Search, null)
                             }
                         }
-                        IconButton(onClick = {/* Do Something*/ }) {
-                            Icon(Icons.Filled.MoreVert, null)
-                        }
+                        actions?.invoke()
                     }
                 )
                 bottomContent?.invoke()
