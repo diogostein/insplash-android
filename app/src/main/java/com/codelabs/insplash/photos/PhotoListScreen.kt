@@ -2,10 +2,8 @@ package com.codelabs.insplash.photos
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -13,19 +11,16 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.codelabs.insplash.R
 import com.codelabs.insplash.app.Const
 import com.codelabs.insplash.app.states.UiState
 import com.codelabs.insplash.app.models.Photo
+import com.codelabs.insplash.photos.dialogs.AboutDialog
 import com.codelabs.insplash.ui.composables.*
 import com.google.accompanist.insets.navigationBarsPadding
 
@@ -38,7 +33,10 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
 
     var hideSearchField by rememberSaveable { mutableStateOf(true) }
     var showMenu by remember { mutableStateOf(false) }
-    var menuMoreCoordinates by remember { mutableStateOf(Size.Zero) }
+
+    val showAboutDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
+
+    AboutDialog(showAboutDialog)
 
     Scaffold(
         topBar = {
@@ -58,15 +56,19 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
                             Icon(Icons.Filled.MoreVert, null)
                         }
                         PopupMenu(
-                            menuItems = listOf(stringResource(R.string.favorites)),
-                            onClickCallbacks = listOf {
+                            menuItems = listOf(
+                                stringResource(R.string.favorites),
+                                stringResource(R.string.about)
+                            ),
+                            onClickCallbacks = listOf({
                                 navController.navigate("favorites")
-                            },
+                            }, {
+                                showAboutDialog.value = true
+                            }),
                             showMenu = showMenu,
                             onDismiss = { showMenu = false }) {
                         }
                     }
-
                 }
             ) {
                 Row(

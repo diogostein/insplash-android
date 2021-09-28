@@ -153,15 +153,7 @@ private fun BoxScope.BottomSection(photo: Photo) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Surface(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.dp, Color.White, CircleShape)
-                .shadow(4.dp, CircleShape)
-        ) {
-            GlideNetworkImage(photo.user?.profileImage?.medium ?: "")
-        }
+        CircleAvatar(url = photo.user?.profileImage?.medium ?: "")
         Text(photo.user?.name ?: "-",
             color = Color.White,
             style = MaterialTheme.typography.h6.copy(

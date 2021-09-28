@@ -21,10 +21,6 @@ class FavoriteListViewModel @Inject constructor(
     private val _state = mutableStateOf<UiState<List<Photo>>>(UiState.Initial)
     val state: State<UiState<List<Photo>>> = _state
 
-    init {
-        getFavorites()
-    }
-
     fun getFavorites() {
         _state.value = UiState.Loading
 

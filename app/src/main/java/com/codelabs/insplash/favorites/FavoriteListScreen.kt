@@ -25,6 +25,10 @@ fun FavoriteListScreen(
     navController: NavController,
     viewModel: FavoriteListViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.getFavorites()
+    }
+
     StatusBarTheme(darkIcons = true)
 
     val state = viewModel.state.value
