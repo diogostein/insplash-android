@@ -46,11 +46,11 @@ fun CustomTopAppBar(
     Box {
         Surface(
             elevation = 8.dp,
-            modifier = Modifier.statusBarsPadding(),
+            modifier = Modifier
+                .statusBarsPadding()
+                .background(color = MaterialTheme.colors.primarySurface),
         ) {
-            Column(
-                modifier = Modifier.background(color = MaterialTheme.colors.primarySurface)
-            ) {
+            Column {
                 TopAppBar(
                     elevation = 0.dp,
                     title = {

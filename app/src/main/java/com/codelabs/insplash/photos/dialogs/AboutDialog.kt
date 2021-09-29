@@ -38,8 +38,8 @@ fun AboutDialog(visible: MutableState<Boolean>) {
                         fontSize = 26.sp
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("Developed by Diogo Stein",
-                        color = Color.Black,
+                    Text(stringResource(R.string.developed_by_me),
+                        color = MaterialTheme.colors.onPrimary,
                         fontFamily = FontFamily.Default,
                         fontSize = 12.sp,
                     )
@@ -66,13 +66,13 @@ fun AboutDialog(visible: MutableState<Boolean>) {
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Row {
-                        Text("Credits to ",
-                            color = Color.Black,
+                        Text(stringResource(R.string.credits_to) + " ",
+                            color = MaterialTheme.colors.onPrimary,
                             fontFamily = FontFamily.Default,
                             fontSize = 12.sp,
                         )
                         Text("Unsplash API",
-                            color = Color.Black,
+                            color = MaterialTheme.colors.onPrimary,
                             fontFamily = FontFamily.Default,
                             fontSize = 12.sp,
                             textDecoration = TextDecoration.Underline,
@@ -81,7 +81,6 @@ fun AboutDialog(visible: MutableState<Boolean>) {
                             }
                         )
                     }
-
                 }
             },
             confirmButton = {

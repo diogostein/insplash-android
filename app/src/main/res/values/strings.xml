@@ -17,6 +17,8 @@
     <string name="api_rate_limit_exceeded">API Rate limit exceeded.\nPlease try again later.</string>
     <string name="unknown_error">Unknown error.</string>
     <string name="failed_to_fetch_data">Failed to fetch data.\nCheck your connection or try again later.</string>
+    <string name="developed_by_me">Developed by Diogo Stein</string>
+    <string name="credits_to">Credits to</string>
 
     <plurals name="downloads">
         <item quantity="one">%,1d download</item>

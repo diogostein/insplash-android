@@ -11,6 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,69 +33,15 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
     val state = viewModel.state.value
     val query = viewModel.query.value
 
-    var hideSearchField by rememberSaveable { mutableStateOf(true) }
-    var showMenu by remember { mutableStateOf(false) }
-
-    val showAboutDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
-
-    AboutDialog(showAboutDialog)
-
     Scaffold(
         topBar = {
-            CustomTopAppBar(
-                initialSearchText = query,
-                hideSearchField = hideSearchField,
-                onSearch = {
-                    hideSearchField = false
-                    viewModel.getPhotos(true, it)
-                },
-                onCancelSearch = {
-                    viewModel.getPhotos(true)
-                },
-                actions = {
-                    Box {
-                        IconButton(onClick = { showMenu = true }) {
-                            Icon(Icons.Filled.MoreVert, null)
-                        }
-                        PopupMenu(
-                            menuItems = listOf(
-                                stringResource(R.string.favorites),
-                                stringResource(R.string.about)
-                            ),
-                            onClickCallbacks = listOf({
-                                navController.navigate("favorites")
-                            }, {
-                                showAboutDialog.value = true
-                            }),
-                            showMenu = showMenu,
-                            onDismiss = { showMenu = false }) {
-                        }
-                    }
-                }
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(MaterialTheme.colors.primarySurface)
-                ) {
-                    ChipGroup(
-                        chipValues = Const.Seed.topics.map { ChipValue(it.title!!, it.slug!!) },
-                        selectedValue = query,
-                        onChanged = {
-                            hideSearchField = true
-                            viewModel.getPhotos(true, it)
-                        }
-                    )
-                }
-            }
+            TopBar(navController, viewModel, query)
         },
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
         ) {
             when (state) {
                 is UiState.Loading -> CenteredProgress()
@@ -111,6 +59,93 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
     }
 }
 
+@Composable
+private fun TopBar(navController: NavController, viewModel: PhotoListViewModel, query: String?) {
+    var hideSearchField by rememberSaveable { mutableStateOf(true) }
+    var showMenu by remember { mutableStateOf(false) }
+
+    val showAboutDialog = remember { mutableStateOf(false) }
+
+    AboutDialog(showAboutDialog)
+
+    CustomTopAppBar(
+        initialSearchText = query,
+        hideSearchField = hideSearchField,
+        onSearch = {
+            hideSearchField = false
+            viewModel.getPhotos(true, it)
+        },
+        onCancelSearch = {
+            viewModel.getPhotos(true)
+        },
+        actions = {
+            Box {
+                IconButton(onClick = { showMenu = true }) {
+                    Icon(Icons.Filled.MoreVert, null)
+                }
+                PopupMenu(
+                    menuItems = listOf(
+                        stringResource(R.string.favorites),
+                        stringResource(R.string.about)
+                    ),
+                    onClickCallbacks = listOf({
+                        navController.navigate("favorites")
+                    }, {
+                        showAboutDialog.value = true
+                    }),
+                    showMenu = showMenu,
+                    onDismiss = { showMenu = false }) {
+                }
+            }
+        }
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .background(MaterialTheme.colors.primarySurface),
+        ) {
+            ChipGroup(
+                chipValues = Const.Seed.topics.map { ChipValue(it.title!!, it.slug!!) },
+                selectedValue = query,
+                onChanged = {
+                    hideSearchField = true
+                    viewModel.getPhotos(true, it)
+                }
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(30.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                MaterialTheme.colors.primary,
+                                Color.Transparent
+                            )
+                        )
+                    )
+                    .align(Alignment.TopStart)
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(30.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                MaterialTheme.colors.primary
+                            )
+                        )
+                    )
+                    .align(Alignment.TopEnd)
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PhotoList(
@@ -121,7 +156,7 @@ private fun PhotoList(
     val count = state.value.size
 
     LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
+        cells = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(4.dp),
     ) {
         items(count + 1) { index ->
@@ -142,6 +177,7 @@ private fun PhotoList(
                 val photo = state.value[index]
 
                 PhotoListFrame(onTap = { onItemClick(photo) }) {
+                    //BlurImage(photo.blurHash)
                     GlideNetworkImage(photo.urls?.regular ?: "")
                 }
             }

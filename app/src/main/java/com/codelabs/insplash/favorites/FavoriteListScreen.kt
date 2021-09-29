@@ -77,11 +77,12 @@ private fun FavoriteList(
     onItemClick: (Photo) -> Unit,
 ) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
+        cells = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(4.dp),
     ) {
         items(photos) { photo ->
             PhotoListFrame(onTap = { onItemClick(photo) }) {
+                //BlurImage(photo.blurHash)
                 GlideNetworkImage(photo.urls?.regular ?: "")
             }
         }
