@@ -73,7 +73,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     // Navigation Compose
-    def navigation_compose_version = '2.4.0-alpha08'
+    def navigation_compose_version = '2.4.0-alpha09'
     implementation "androidx.navigation:navigation-compose:$navigation_compose_version"
 
     // Hilt
@@ -92,7 +92,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
-    implementation "com.github.skydoves:landscapist-glide:1.3.6"
+    // Glide for Compose
+    def landscapist_glide_version = '2.9.0'
+    implementation "com.github.skydoves:landscapist-glide:$landscapist_glide_version"
 
     // Accompanist
     def accompanist_version = '0.18.0'
