@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Insplash</string>
+    <string name="app_name" translatable="false">Insplash</string>
 
     <string name="reload">Reload</string>
     <string name="location">Location</string>
