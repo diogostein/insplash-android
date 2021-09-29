@@ -11,8 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,14 +32,13 @@ fun PhotoListScreen(navController: NavController, viewModel: PhotoListViewModel 
     val query = viewModel.query.value
 
     Scaffold(
+        modifier = Modifier.navigationBarsPadding(),
         topBar = {
             TopBar(navController, viewModel, query)
         },
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
+            modifier = Modifier.fillMaxSize()
         ) {
             when (state) {
                 is UiState.Loading -> CenteredProgress()
@@ -100,7 +97,6 @@ private fun TopBar(navController: NavController, viewModel: PhotoListViewModel, 
         }
     ) {
         Box(
-            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp)
@@ -113,34 +109,6 @@ private fun TopBar(navController: NavController, viewModel: PhotoListViewModel, 
                     hideSearchField = true
                     viewModel.getPhotos(true, it)
                 }
-            )
-            Spacer(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(30.dp)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                MaterialTheme.colors.primary,
-                                Color.Transparent
-                            )
-                        )
-                    )
-                    .align(Alignment.TopStart)
-            )
-            Spacer(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(30.dp)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                MaterialTheme.colors.primary
-                            )
-                        )
-                    )
-                    .align(Alignment.TopEnd)
             )
         }
     }

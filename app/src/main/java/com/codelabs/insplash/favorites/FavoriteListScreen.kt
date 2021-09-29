@@ -34,6 +34,7 @@ fun FavoriteListScreen(
     val state = viewModel.state.value
 
     Scaffold(
+        modifier = Modifier.navigationBarsPadding(),
         topBar = {
             Toolbar(
                 title = {
@@ -52,9 +53,7 @@ fun FavoriteListScreen(
         },
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding(),
+            modifier = Modifier.fillMaxSize()
         ) {
             when (state) {
                 is UiState.Loading -> CenteredProgress()

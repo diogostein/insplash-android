@@ -19,6 +19,6 @@ fun GlideNetworkImage(url: String, modifier: Modifier = Modifier) {
             .centerCrop(),
         contentScale = ContentScale.Crop,
         alignment = Alignment.Center,
-        circularReveal = CircularReveal(duration = 250)
+        circularReveal = CircularReveal(duration = 250),
     )
 }
