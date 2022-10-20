@@ -2,6 +2,14 @@
 
 # Insplash
 
+<div align="center">
+  <img width="25%" src="https://diogostein.dev/assets/codelabs/insplash_1-49753a2ce55aaaf7be040f15de4da966fe978cbc0fa4607df6135ecd7e26e26f.png" />
+  <img width="25%" src="https://diogostein.dev/assets/codelabs/insplash_3-0d25df65fdd96b9149b79ede64401fa6481f433381a678a3b930fe34c20ac1d4.png" />
+  <img width="25%" src="https://diogostein.dev/assets/codelabs/insplash_2-4def3745102c1970f5389b93b2543bd04044b4a4885d53b055b9a7a6571257ce.png" />
+</div>
+
+<hr/>
+
 Insplash é um aplicativo desenvolvido na linguagem Kotlin para Android utilizando o Jetpack Compose UI Toolkit para construção da interface e consome a API do [Unsplash](https://unsplash.com/) que é um repositório de imagens gratuitas.
 
 O app possui uma tela de listagem de fotos com opção de pesquisa, uma tela para exibir a foto + informações e uma tela para listagem das fotos favoritas. Possui uma funcionalidade para favoritar fotos que serão salvas somente no banco de dados local por questões de simplicidade. 
