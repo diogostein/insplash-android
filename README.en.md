@@ -2,6 +2,14 @@
 
 # Insplash
 
+<div align="center">
+  <img width="25%" src="https://diogostein.dev/assets/codelabs/insplash_1-49753a2ce55aaaf7be040f15de4da966fe978cbc0fa4607df6135ecd7e26e26f.png" />
+  <img width="25%" src="https://diogostein.dev/assets/codelabs/insplash_3-0d25df65fdd96b9149b79ede64401fa6481f433381a678a3b930fe34c20ac1d4.png" />
+  <img width="25%" src="https://diogostein.dev/assets/codelabs/insplash_2-4def3745102c1970f5389b93b2543bd04044b4a4885d53b055b9a7a6571257ce.png" />
+</div>
+
+<hr/>
+
 Insplash is an application developed in Kotlin language for Android using the Jetpack Compose UI Toolkit to build the interface and consumes the API of [Unsplash](https://unsplash.com/) which is a repository of free images.
 
 The app has a photo listing screen with search option, a screen to display the photo + info, and a screen to list favorite photos. It has a feature to bookmark photos that will only be saved in the local database for simplicity.
